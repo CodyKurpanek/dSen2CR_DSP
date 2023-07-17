@@ -1,0 +1,45 @@
+change to from tools.dataIO
+          from tools.myCallbacks
+
+
+instead of 
+conda install -c conda-forge python=3.7 tensorflow-gpu=1.15.0 keras=2.2.4 numpy scipy rasterio pydot graphviz h5py
+run
+conda install -c conda-forge python=3.7 tensorflow=1.15.0 keras=2.2.4 numpy scipy rasterio pydot graphviz h5py
+
+conda install -c conda-forge matplotlib
+conda install -c conda-forge numpy==1.19.5
+
+
+Modify lines 58 and 59 in dsen2cr_main.py from :
+    base_out_path = '/path/to/output/model_runs/'
+    input_data_folder = '/path/to/dataset/parent/folder'
+
+to 
+
+    base_out_path = '/home/cody/dspath/dsen2-cr/Models'
+    input_data_folder = '/home/cody/dspath/dsen2-cr/Data'
+
+create 3 new folders within input_data_folder:
+    (1)'/home/cody/dspath/dsen2-cr/Data/s1'
+    (2)'/home/cody/dspath/dsen2-cr/Data/s2_cloudFree'
+    (3)'/home/cody/dspath/dsen2-cr/Data/s2_cloudy'
+
+
+
+Change the line 19 in dsen2cr_tools.py from 
+# out_path_train = make_dir(os.path.join(base_out_path, model_name, '/'))
+to 
+out_path_train = make_dir(os.path.join(base_out_path, model_name))
+
+because adding the slash at the end disregards everything before that (base_out_path, model_name)
+
+change 56 in main from 
+dataset_list_filepath = '../Data/datasetfilelist.csv'
+to
+dataset_list_filepath = '/home/cody/dspath/dsen2-cr/Data/datasetfilelist.csv'
+
+
+line 5 in tools/dsen2cr_tools.py to tools.dataIO
+
+myCallbacks to tools.myCallbacks
