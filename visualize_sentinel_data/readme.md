@@ -10,11 +10,11 @@ conda install -c conda_forge gdal
 conda install -c conda-forge matplotlib numpy==1.19.5
 ```
 
-Add data filepath to beginning of view_s2.py
+Add data filepath to beginning of main.py
 
 ### Run the script:
 ```bash
-python view_s2.py
+python main.py
 ```
 
 This displays the sentinel-2 images in natural color by selecting bands b4 (Red light), b3 (Green light), b2 (Blue light). Adjust the Gain slider if the image appears too light or dark.
