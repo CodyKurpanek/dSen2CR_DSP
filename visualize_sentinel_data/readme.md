@@ -3,14 +3,14 @@
 
 Install important libraries:
 ```bash
-conda install -c conda_forge gdal
+conda install -c conda-forge gdal
 ```
 (extra libraries if needed):
 ```bash
 conda install -c conda-forge matplotlib numpy==1.19.5
 ```
 
-Add data filepath to beginning of main.py
+Add data folder path to beginning of main.py
 
 ### Run the script:
 ```bash
