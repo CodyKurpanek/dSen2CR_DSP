@@ -53,15 +53,17 @@ def run_dsen2cr(predict_file=None, resume_file=None):
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Setup training %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    dataset_list_filepath = '/home/cody/dspath/dsen2-cr/Data/datasetfilelist.csv'
+    dataset_list_filepath = '/home/jovyan/dsen2-cr/Data/train_val_test_patches.csv'
+    base_out_path = '/home/jovyan/ModelRuns'
 
-    base_out_path = '/home/cody/dspath/dsen2-cr/Models'
-    input_data_folder = '/home/cody/dspath/dsen2-cr/Data'
+    input_data_folder = '/home/jovyan/input_data_folder'
+    # input_data_folder = '/data/input_data_folder'
+
 
     # training parameters
     initial_epoch = 0  # start at epoch number
     epochs_nr = 8  # train for this amount of epochs. Checkpoints will be generated at the end of each epoch
-    batch_size = 16  # training batch size to distribute over GPUs
+    batch_size = 48  # training batch size to distribute over GPUs
 
     # define metric to be optimized
     loss = img_met.carl_error
@@ -85,9 +87,9 @@ def run_dsen2cr(predict_file=None, resume_file=None):
 
     log_step_freq = 1  # frequency of logging
 
-    n_gpus = 1  # set number of GPUs
+    n_gpus = 4  # set number of GPUs
     # multiprocessing optimization setup
-    use_multi_processing = True
+    use_multi_processing = False
     max_queue_size = 2 * n_gpus
     workers = 4 * n_gpus
 
@@ -97,6 +99,9 @@ def run_dsen2cr(predict_file=None, resume_file=None):
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Initialize session %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    # #ADDING THIS
+    # gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.85)
+    
     # Configure Tensorflow session
     config = tf.ConfigProto()
     # Don't pre-allocate memory; allocate as-needed
@@ -141,6 +146,9 @@ def run_dsen2cr(predict_file=None, resume_file=None):
 
     print("Getting file lists")
     train_filelist, val_filelist, test_filelist = get_train_val_test_filelists(dataset_list_filepath)
+    # train_filelist = train_filelist[:300]
+    # val_filelist = val_filelist[:30] 
+    # test_filelist = test_filelist[:30]
 
     print("Number of train files found: ", len(train_filelist))
     print("Number of validation files found: ", len(val_filelist))
@@ -161,6 +169,7 @@ def run_dsen2cr(predict_file=None, resume_file=None):
 
     else:
         # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TRAIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
         train_dsen2cr(model, model_name, base_out_path, resume_file, train_filelist, val_filelist, lr, log_step_freq,
                       shuffle_train, data_augmentation, random_crop, batch_size, scale, clip_max, clip_min, max_val_sar,
                       use_cloud_mask, cloud_threshold, crop_size, epochs_nr, initial_epoch, input_data_folder,
